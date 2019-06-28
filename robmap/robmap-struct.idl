@@ -1,0 +1,16 @@
+#ifndef IDL_ROB_MAP_STRUCT
+#define IDL_ROB_MAP_STRUCT
+
+module robmap {
+
+  const unsigned long task_period = 50; // this is what DTM uses when
+					// connected to a velodyne
+
+  const unsigned long long_wcet = 20;
+  const unsigned long short_wcet = 10;
+  const unsigned long control_wcet = 10;
+
+
+};
+
+#endif

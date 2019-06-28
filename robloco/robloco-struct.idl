@@ -1,0 +1,42 @@
+#ifndef IDL_ROB_LOCO_STRUCT
+#define IDL_ROB_LOCO_STRUCT
+
+module robloco {
+  
+  const unsigned long track_task_period = 50; 
+  const unsigned long odo_task_period = 50;   
+
+  const float millisecond = 0.001;
+
+  const unsigned long long_wcet = 20;
+  const unsigned long short_wcet = 10;
+  const unsigned long control_wcet = 10;
+
+
+  struct position {
+    float x;
+    float y; 
+  };
+  
+  enum speed_enum {		
+    STOPPED,
+    VERY_SLOW,
+    SLOW,
+    MEDIUM,
+    FAST,
+    VERY_FAST
+  };
+  
+  enum dir_enum {		
+    STAND, N, NE, E, SE, S, SW, W, NW
+  };
+  
+  struct speed_ref {
+    speed_enum speed;
+    dir_enum direction;
+  };
+  
+};
+
+
+#endif

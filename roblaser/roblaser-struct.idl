@@ -1,0 +1,29 @@
+#ifndef IDL_ROB_LASER_STRUCT
+#define IDL_ROB_LASER_STRUCT
+
+
+
+module roblaser {
+
+  const unsigned long task_period = 50; // this is the velodyne period when it turns at 20rps.
+
+  const unsigned long long_wcet = 20;
+  const unsigned long short_wcet = 10;
+  const unsigned long control_wcet = 10;
+
+
+  const unsigned long laser_range = 10; // a Velodyne can probably
+					// make even better
+
+  typedef robsim::cell_type LaserCol[laser_range * 2 + 1];
+  typedef LaserCol Laser[laser_range * 2 + 1];
+
+   struct laser {
+   Laser laser; // center 5,5
+   robloco::position position;
+   };
+
+
+};
+
+#endif

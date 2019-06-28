@@ -1,0 +1,18 @@
+#ifndef IDL_ROB_MOTION_STRUCT
+#define IDL_ROB_MOTION_STRUCT
+
+module robmotion {
+
+  const unsigned long task_period = 200; 
+
+  const unsigned long long_wcet = 20;
+  const unsigned long short_wcet = 10;
+  const unsigned long control_wcet = 10;
+
+  const float success_dist_to_goal = 0.5; 
+
+  const unsigned short motion_range = 7; 
+  const unsigned short max_attempts = 10; 
+};
+
+#endif

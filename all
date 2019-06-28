@@ -1,0 +1,4 @@
+#include "robloco/robloco.gen"
+#include "robmotion/robmotion.gen"
+#include "robmap/robmap.gen"
+#include "roblaser/roblaser.gen"

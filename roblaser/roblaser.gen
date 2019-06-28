@@ -1,0 +1,98 @@
+#pragma requires  "robsim-genom3"
+#pragma requires  "robloco-genom3"
+
+#include "robsim/robsim-struct.idl"
+#include "robloco/robloco-struct.idl"
+#include "roblaser-struct.idl"
+
+/* -------------------------- MODULE DECLARATION --------------------------- */
+component roblaser {
+ version  "1.0";
+ email	  "felix@laas.fr";
+ lang	  "c";
+
+
+/* ------------- DEFINITION OF THE MODULE’s INTERNAL DATABASE -------------- */
+ ids {
+   unsigned short range;
+   laser current_laser;
+ };
+
+
+  exception		INVALID_MAP, INVALID_POSITION, INVALID_RANGE;
+
+
+/* ------------- DEFINITION OF PORTS -------------- */
+
+port out laser E_current_laser;
+port in robsim::map E_real_map; // the perceived map from the laser. The simulated map is stored here...
+port in robloco::position E_current_position;
+
+
+
+/* ------------------ TASK DEFINITION -------------------- */
+
+task scan {
+ period	    roblaser::task_period ms;
+ priority   100;
+ stack 	    4000;
+ codel <start> InitScanParameters(out ::ids) yield ether wcet 10 ms;
+};
+
+
+/* ------------------ SERVICES DEFINITION: The attributes -------------------- */
+/*
+attribute GetCurrentLaser(out current_laser)
+{
+  doc		"To get the ids current_laser content.";
+};
+
+attribute SetLaserRange(in range)
+{
+  validate 	controlRange(local in range) wcet roblaser::control_wcet ms;
+  doc		"Set the range of the laser.";
+  throw         INVALID_RANGE;
+};
+
+attribute GetLaserRange(out range)
+{
+  doc		"Set the range of the laser.";
+};
+*/
+/* ------------------ SERVICES DEFINITION: The Functions -------------------- */
+/*
+function ScanStop()
+{
+ doc		"Stop laser scanning.";
+ interrupts 	ScanMap;
+};
+
+function PrintScan()
+{
+  codel          print_scan(ids in current_laser, ids in range);
+  doc		"Print the IDS current_laser in readable format.";
+};
+*/
+/* ------------------ SERVICES DEFINITION: The activities -------------------- */
+/*
+activity InitLaserPort()
+{
+ doc 	 	      "Initialize the position port";
+codel <start> 	      InitLaserPort(ids inout current_laser, port in E_current_position, port out E_current_laser) yield ether wcet roblaser::short_wcet ms;
+ task 		      scan;
+};
+*/
+activity ScanMap ()
+{
+ doc 	 	      "Start scaning the map in the port Laser ";
+ codel <start> 	      ScanStart(port in E_real_map, ids out current_laser.position, port in E_current_position) yield read_laser wcet 5 ms;
+ codel <read_laser>   read_laser_scan(ids in current_laser.position, ids out current_laser.laser, ids in range, port in E_real_map) yield write_lport wcet 20 ms;
+ codel <write_lport>  write_lport(ids in current_laser, port out E_current_laser) yield pause::start wcet 10 ms;
+ codel <stop>	      ScanStop() yield ether wcet 10 ms;
+ interrupts 	      ScanMap;
+ task 		      scan;
+ throw 		      INVALID_MAP, INVALID_POSITION;
+};
+
+};
+
